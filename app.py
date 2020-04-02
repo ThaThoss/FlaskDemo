@@ -12,7 +12,7 @@ def index():
 @app.route('/about')
 def about():
   return render_template('about.html')
-@app.route('\hello')
+@app.route('/hello')
 def hello():
     return 'Hello, World'
 
