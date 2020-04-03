@@ -4,3 +4,4 @@ quandl
 bokeh
 pandas
 flask
+flask_wtf
