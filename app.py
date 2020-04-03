@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
 import quandl
 import pandas as pd
 from bokeh.embed import components
-from bokeh.plotting import figure, redirect, url_for
+from bokeh.plotting import figure
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 
