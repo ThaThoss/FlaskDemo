@@ -28,11 +28,11 @@ def get_data(form):
           paginate=True)
  
        data = data.set_index('date')
-       output_file("templates/plot.html")
+      # output_file("templates/lines.html")
 
        p3 = figure(x_axis_type="datetime", title=request.form.get('ticker'))
        p3.line(x=data.index,y=data['adj_close'])
-       save(p3)
+      # save(p3)
        script, div = components(p3)
 
         
@@ -40,9 +40,11 @@ def get_data(form):
 
 
 
+@app.route('/')
+def passingon():
+    return redirect(url_for('index'))
 
-
-@app.route('/', methods=["GET","POST"])
+@app.route('/index', methods=["GET","POST"])
 def index():
     quandl.ApiConfig.api_key = "8BgrwGdnNHG_Bsr5XgxR"
     #data = quandl.get("FRED/GDP",start_date="2020-01-01",end_date="2020-02-31")
@@ -84,11 +86,11 @@ def index():
 
     form = InputForm()
 
-    script, div = components(p2)
+    #script, div = components(p2)
     if request.method == 'POST':
         
         script, div = get_data(form)
-        
+        #return redirect(url_for('lines'))
         return render_template('plot.html', script=script, div=div)
 
         
@@ -98,11 +100,13 @@ def index():
      #   for key, value in request.form.getlist('features'):
       #      print("key: {0}, value: {1}".fomat(key, value))
         
-    return render_template('index.html', script=script, div=div, form=form)
+    return render_template('index.html', form=form)
 
 
 
-
+@app.route('/lines')
+def lines():
+    return render_template('lines.html')
 
 @app.route('/about')
 def about():
