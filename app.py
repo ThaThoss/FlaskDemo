@@ -36,7 +36,7 @@ def get_data(form):
        script, div = components(p3)
 
         
-       return render_template('plot.html', script=script, div=div)
+       return script, div 
 
 
 
@@ -87,8 +87,10 @@ def index():
     script, div = components(p2)
     if request.method == 'POST':
         
-        data = get_data(form)
+        script, div = get_data(form)
         
+        return render_template('plot.html', script=script, div=div)
+
         
         
        
