@@ -44,9 +44,22 @@
             </div>
         </div>
     </div>
+     <div class="container">
+         <div class="row">
+             <div class="col-lg-12 text-left">
+                 <form method='post' action=''>
+			 <p>
+			 {{ form.ticker.label }}<br>
+			 {{ form.ticker(size=32) }} 
+			 </p>
 
+                         <p>{{ form.submit() }}</p>
+                 </form>
+             </div>
+         </div>
+     </div>
 
-    <!-- form -->
+    <!--Form:	
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-left">
@@ -58,11 +71,11 @@
                         <input type="checkbox" name='features' value='open' />Opening price<br>
                         <input type="checkbox" name='features' value='adj_open' />Adjusted opening price<br>
                     </p>
-                    <p><input type="submit" value="Submit"></p>
+		    <p><input type="submit" value='Submit'></p>
                 </form>
             </div>
         </div>
-    </div>
+    </div>-->
     <h1>Plot from Bokeh</h1>
     {{ script|safe }} {{ div|safe }}
 

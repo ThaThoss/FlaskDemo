@@ -1,12 +1,48 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
+from flask_wtf import FlaskForm
 import quandl
 import pandas as pd
 from bokeh.embed import components
 from bokeh.plotting import figure, save, output_file
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
+
+
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'Hemmelig'
 
-@app.route('/')
+class InputForm(FlaskForm):
+    ticker = StringField('Ticker', validators=[DataRequired()]) 
+    features = StringField('features')
+    submit = SubmitField('Submit')
+
+def get_data(form):
+       quandl.ApiConfig.api_key = "8BgrwGdnNHG_Bsr5XgxR"
+  
+  
+  
+       data = quandl.get_table('WIKI/PRICES', ticker = request.form.get('ticker'),
+           qopts = {'columns': ['ticker', 'date','adj_close']},
+           date = { 'gte': '2015-12-31', 'lte': '2016-12-31' },
+          paginate=True)
+ 
+       data = data.set_index('date')
+       output_file("templates/plot.html")
+
+       p3 = figure(x_axis_type="datetime", title=request.form.get('ticker'))
+       p3.line(x=data.index,y=data['adj_close'])
+       save(p3)
+       script, div = components(p3)
+
+        
+       return render_template('plot.html', script=script, div=div)
+
+
+
+
+
+@app.route('/', methods=["GET","POST"])
 def index():
     quandl.ApiConfig.api_key = "8BgrwGdnNHG_Bsr5XgxR"
     #data = quandl.get("FRED/GDP",start_date="2020-01-01",end_date="2020-02-31")
@@ -46,13 +82,21 @@ def index():
     p2.circle(x1, y1, legend_label="y=10^x", fill_color="red", line_color="red", size=6)
     p2.line(x1,y2, legend_label="y=10^x^2", line_color="orange", line_dash="4 4")
 
-  
+    form = InputForm()
 
     script, div = components(p2)
-
-    
+    if request.method == 'POST':
         
-    return render_template('index.html', script=script, div=div)
+        data = get_data(form)
+        
+        
+        
+       
+            
+     #   for key, value in request.form.getlist('features'):
+      #      print("key: {0}, value: {1}".fomat(key, value))
+        
+    return render_template('index.html', script=script, div=div, form=form)
 
 
 
