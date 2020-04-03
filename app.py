@@ -20,18 +20,21 @@ class InputForm(FlaskForm):
 def get_data(form):
        quandl.ApiConfig.api_key = "8BgrwGdnNHG_Bsr5XgxR"
   
-  
+       colors=['blue','red','orange','green'] 
   
        data = quandl.get_table('WIKI/PRICES', ticker = request.form.get('ticker'),
-           qopts = {'columns': ['ticker', 'date','adj_close']},
+           qopts = {'columns': ['ticker', 'date','close','adj_close','open','adj_open']},
            date = { 'gte': '2015-12-31', 'lte': '2016-12-31' },
           paginate=True)
  
        data = data.set_index('date')
       # output_file("templates/lines.html")
 
-       p3 = figure(x_axis_type="datetime", title=request.form.get('ticker'))
-       p3.line(x=data.index,y=data['adj_close'])
+       p3 = figure(x_axis_type="datetime", title='Showing price for: ' + request.form.get('ticker') + ' 2016')
+       c=0
+       for feature in request.form.getlist('features'):
+           p3.line(x=data.index,y=data[feature],legend_label=feature,line_color=colors[c])
+           c=c+1
       # save(p3)
        script, div = components(p3)
 
